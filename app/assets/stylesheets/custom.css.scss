@@ -173,6 +173,20 @@ input {
   height: auto !important;
 }
 
+#error_explanation {
+  color: #f00;
+  ul {
+    list-style: none;
+    margin: o o 18px 0;
+  }
+}
+
+/* On error pages Rails automatically wraps the fields with errors in divs
+   with the CSS class field_with_errors. */
+.field_with_errors {
+  @extend .control-group;   /* Here @extend includes the functionality */
+  @extend .error;           /* of two Bootstrap classes */
+}
 
 
 
