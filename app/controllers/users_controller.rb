@@ -1,7 +1,8 @@
 class UsersController < ApplicationController
-  before_action :signed_in_user,  only: [:index, :edit, :update, :destroy]
-  before_action :correct_user,    only: [:edit, :update]
-  before_action :admin_user,      only: :destroy 
+  before_action :non_signed_in_user,  only: [:new, :create]
+  before_action :signed_in_user,      only: [:index, :edit, :update, :destroy]
+  before_action :correct_user,        only: [:edit, :update]
+  before_action :admin_user,          only: :destroy 
 
   def index
     @users = User.paginate(page: params[:page])
@@ -40,9 +41,14 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    User.find(params[:id]).destroy
-    flash[:success] = "User deleted."
-    redirect_to users_url
+    victim = User.find(params[:id])
+    unless current_user?(victim)
+      victim.destroy
+      flash[:success] = "User deleted."
+      redirect_to users_url
+    else
+      redirect_to root_url
+    end
   end
 
   private
@@ -53,6 +59,12 @@ class UsersController < ApplicationController
     end
 
     # Before filters
+
+    def non_signed_in_user
+      if signed_in?
+        redirect_to root_url, notice: "You already have an account."
+      end 
+    end
 
     def signed_in_user
       unless signed_in?
