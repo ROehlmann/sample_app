@@ -6,5 +6,9 @@ FactoryGirl.define do
   	password_confirmation	"foobar"
   	# This definitions allows us to create a User factory in the tests
   	# with let(:user) { FactoryGirl.create(:user) }
+
+  	factory :admin do
+  	  admin true		# FactoryGirl.create(:admin)
+  	end
   end
 end
