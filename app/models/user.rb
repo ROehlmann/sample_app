@@ -18,6 +18,14 @@ class User < ActiveRecord::Base
   	Digest::SHA1.hexdigest(token.to_s)
   end
 
+  def feed
+    # This is preliminary. See "Following users" for the full implementation.
+    Micropost.where("user_id = ?", id)
+    # the '?' ensures that id is properly escaped before being included in the
+    # underlying SQL query, thereby avoiding a serious security hole called 
+    # SQL injection
+  end
+
   private
 
     def create_remember_token
